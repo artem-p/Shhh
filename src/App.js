@@ -1,11 +1,10 @@
 import './App.css';
+import Player from './Player.js';
 
 function App() {
   return (
     <div className="app">
-      <div className="controls">
-        <button className="play-white">White Noise</button>
-      </div>
+      <Player />
     </div>
   );
 }
