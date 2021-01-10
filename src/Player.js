@@ -27,9 +27,11 @@ function Player() {
     
             let noise = audioContext.createBufferSource();
             noise.buffer = buffer; 
-            console.log('sound');
             noise.connect(audioContext.destination);
+            noise.loop = true;
             noise.start();
+        } else {
+
         }
 
         return () => {
