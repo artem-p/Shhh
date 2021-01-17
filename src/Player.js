@@ -9,14 +9,12 @@ function Player() {
 
     const toggleWhiteClick = togglePlay;
 
-
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioContext = new AudioContext();
-
     const noiseDuration = 2;
     
     
     useEffect(() => {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext();
         let noise;
         if (play) {
             noise = audioContext.createBufferSource();
@@ -51,7 +49,7 @@ function Player() {
                 noise.disconnect();
             }
         }
-    }, [play, audioContext]);
+    }, [play]);
 
 
     return (
