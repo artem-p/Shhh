@@ -42,7 +42,10 @@ function Player() {
             // handleConnect(true);
         } else {
             console.log('stop');
-            if(noise) noise.stop();
+            if(noise) {
+                noise.stop();
+                noise.disconnect();
+            }
             // if (connect) {
                 // noise.disconnect();
                 // handleConnect(false);
@@ -52,7 +55,10 @@ function Player() {
         }
 
         return () => {
-            
+            if (noise) {
+                noise.stop();
+                noise.disconnect();
+            }
         }
     }, [play, audioContext]);
 
