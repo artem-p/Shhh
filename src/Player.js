@@ -3,7 +3,6 @@ import './Player.css';
 
 
 function Player() {
-    const [connect, handleConnect] = useState(false);
     const [play, handlePlay] = useState(false);
 
     const togglePlay = () => handlePlay(!play);
@@ -15,15 +14,11 @@ function Player() {
 
     const noiseDuration = 2;
     
-    const audioContext = new AudioContext();
-    
-
-    
-    // noise.start();
     
     useEffect(() => {
         let noise;
         if (play) {
+            const audioContext = new AudioContext();
             noise = audioContext.createBufferSource();
             const bufferSize = audioContext.sampleRate * noiseDuration;
             const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
@@ -39,19 +34,12 @@ function Player() {
             noise.connect(audioContext.destination);
             console.log('start');
             noise.start();
-            // handleConnect(true);
         } else {
             console.log('stop');
             if(noise) {
                 noise.stop();
                 noise.disconnect();
             }
-            // if (connect) {
-                // noise.disconnect();
-                // handleConnect(false);
-            // }
-
-            // noise.stop();
         }
 
         return () => {
@@ -60,7 +48,7 @@ function Player() {
                 noise.disconnect();
             }
         }
-    }, [play, audioContext]);
+    }, [play]);
 
 
     return (
