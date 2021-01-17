@@ -35,7 +35,7 @@ function Player() {
             handleConnect(true);
         } else {
             if (connect) {
-                noise.disconnect(audioContext.destination);
+                noise.disconnect();
                 handleConnect(false);
             }
 
