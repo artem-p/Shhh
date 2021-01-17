@@ -11,6 +11,7 @@ function Player() {
 
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioContext = new AudioContext();
 
     const noiseDuration = 2;
     
@@ -18,8 +19,8 @@ function Player() {
     useEffect(() => {
         let noise;
         if (play) {
-            const audioContext = new AudioContext();
             noise = audioContext.createBufferSource();
+            let gainNode = audioContext.createGain();
             const bufferSize = audioContext.sampleRate * noiseDuration;
             const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
             let data = buffer.getChannelData(0);
@@ -30,8 +31,10 @@ function Player() {
 
             noise.buffer = buffer; 
             noise.loop = true;
-    
-            noise.connect(audioContext.destination);
+            gainNode.gain.setValueAtTime(0.02, audioContext.currentTime);
+            
+            noise.connect(gainNode);
+            gainNode.connect(audioContext.destination);
             console.log('start');
             noise.start();
         } else {
@@ -48,7 +51,7 @@ function Player() {
                 noise.disconnect();
             }
         }
-    }, [play]);
+    }, [play, audioContext]);
 
 
     return (
