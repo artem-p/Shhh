@@ -16,28 +16,37 @@ function Player() {
     const noiseDuration = 2;
     
     const audioContext = new AudioContext();
-    const bufferSize = audioContext.sampleRate * noiseDuration;
-    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-    let data = buffer.getChannelData(0);
+    
 
-    for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-    }
-
-    let noise = audioContext.createBufferSource();
-    noise.buffer = buffer; 
-    noise.loop = true;
-    noise.start();
+    
+    // noise.start();
     
     useEffect(() => {
+        let noise;
         if (play) {
-            noise.connect(audioContext.destination);
-            handleConnect(true);
-        } else {
-            if (connect) {
-                noise.disconnect();
-                handleConnect(false);
+            noise = audioContext.createBufferSource();
+            const bufferSize = audioContext.sampleRate * noiseDuration;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            let data = buffer.getChannelData(0);
+
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
             }
+
+            noise.buffer = buffer; 
+            noise.loop = true;
+    
+            noise.connect(audioContext.destination);
+            console.log('start');
+            noise.start();
+            // handleConnect(true);
+        } else {
+            console.log('stop');
+            if(noise) noise.stop();
+            // if (connect) {
+                // noise.disconnect();
+                // handleConnect(false);
+            // }
 
             // noise.stop();
         }
@@ -45,7 +54,7 @@ function Player() {
         return () => {
             
         }
-    }, [play, noise]);
+    }, [play, audioContext]);
 
 
     return (
