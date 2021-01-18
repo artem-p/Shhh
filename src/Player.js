@@ -17,51 +17,87 @@ function Player() {
         const audioContext = new AudioContext();
         const bufferSize = audioContext.sampleRate * noiseDuration;
 
-        
-        
-
         const getWhiteBuffer = () => {
             const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-            let whiteData = buffer.getChannelData(0);
+            let data = buffer.getChannelData(0);
 
             for (let i = 0; i < bufferSize; i++) {
-                whiteData[i] = Math.random() * 2 - 1;
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            return buffer;
+        }
+
+        const getBrownBuffer = () => {
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            let data = buffer.getChannelData(0);
+
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                var white = Math.random() * 2 - 1;
+				data[i] = (lastOut + (0.02 * white)) / 1.02;
+				lastOut = data[i];
+				data[i] *= 3.5;
             }
 
             return buffer;
         }
 
         const whiteBuffer = getWhiteBuffer();
+        const brownBuffer = getBrownBuffer();
 
-        let noise;
+        let whiteNoise, brownNoise;
         
         if (playWhite) {
-            noise = audioContext.createBufferSource();
+            whiteNoise = audioContext.createBufferSource();
             let gainNode = audioContext.createGain();
 
-            noise.buffer = whiteBuffer; 
-            noise.loop = true;
+            whiteNoise.buffer = whiteBuffer; 
+            whiteNoise.loop = true;
             gainNode.gain.setValueAtTime(0.04, audioContext.currentTime);
             
-            noise.connect(gainNode);
+            whiteNoise.connect(gainNode);
             gainNode.connect(audioContext.destination);
-            console.log('start');
-            noise.start();
+            whiteNoise.start();
         } else {
-            console.log('stop');
-            if(noise) {
-                noise.stop();
-                noise.disconnect();
+            if(whiteNoise) {
+                whiteNoise.stop();
+                whiteNoise.disconnect();
             }
         }
 
-        return () => {
-            if (noise) {
-                noise.stop();
-                noise.disconnect();
+
+        if (playBrown) {
+            brownNoise = audioContext.createBufferSource();
+            let gainNode = audioContext.createGain();
+
+            brownNoise.buffer = brownBuffer; 
+            brownNoise.loop = true;
+            gainNode.gain.setValueAtTime(0.04, audioContext.currentTime);
+            
+            brownNoise.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            brownNoise.start();
+        } else {
+            if(brownNoise) {
+                brownNoise.stop();
+                brownNoise.disconnect();
             }
         }
-    }, [playWhite]);
+
+
+        return () => {
+            if (whiteNoise) {
+                whiteNoise.stop();
+                whiteNoise.disconnect();
+            }
+
+            if (brownNoise) {
+                brownNoise.stop();
+                brownNoise.disconnect();
+            }
+        }
+    }, [playWhite, playBrown]);
 
 
     return (
