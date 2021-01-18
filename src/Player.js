@@ -18,12 +18,20 @@ function Player() {
         const bufferSize = audioContext.sampleRate * noiseDuration;
 
         
-        const whiteBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-        let whiteData = whiteBuffer.getChannelData(0);
+        
 
-        for (let i = 0; i < bufferSize; i++) {
-            whiteData[i] = Math.random() * 2 - 1;
+        const getWhiteBuffer = () => {
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            let whiteData = buffer.getChannelData(0);
+
+            for (let i = 0; i < bufferSize; i++) {
+                whiteData[i] = Math.random() * 2 - 1;
+            }
+
+            return buffer;
         }
+
+        const whiteBuffer = getWhiteBuffer();
 
         let noise;
         
