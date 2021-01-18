@@ -7,7 +7,9 @@ function Player() {
 
     const togglePlay = () => handlePlay(!play);
 
-    const toggleWhiteClick = togglePlay;
+    const handleWhiteClick = togglePlay;
+
+    const handleBrownClick = () => {}
 
     const noiseDuration = 2;
     
@@ -54,7 +56,8 @@ function Player() {
 
     return (
         <div className="player">
-            <button className="play-white" onClick={toggleWhiteClick}>White Noise</button>
+            <button className="play-white" onClick={handleWhiteClick}>White Noise</button>
+            <button className="play-brown" onClick={handleBrownClick}>Brown Noise</button>
         </div>
     )
 }
