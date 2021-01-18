@@ -3,14 +3,12 @@ import './Player.css';
 
 
 function Player() {
-    const [play, handlePlay] = useState(false);
+    const [playWhite, handlePlayWhite] = useState(false);
+    const [playBrown, handlePlayBrown] = useState(false);
 
-    const togglePlay = () => handlePlay(!play);
-
-    const handleWhiteClick = togglePlay;
-
-    const handleBrownClick = () => {}
-
+    const togglePlayWhite = () => handlePlayWhite(!playWhite);
+    const togglePlayBrown = () => handlePlayBrown(!playBrown);
+ 
     const noiseDuration = 2;
     
     
@@ -18,7 +16,7 @@ function Player() {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioContext = new AudioContext();
         let noise;
-        if (play) {
+        if (playWhite) {
             noise = audioContext.createBufferSource();
             let gainNode = audioContext.createGain();
             const bufferSize = audioContext.sampleRate * noiseDuration;
@@ -51,13 +49,13 @@ function Player() {
                 noise.disconnect();
             }
         }
-    }, [play]);
+    }, [playWhite]);
 
 
     return (
         <div className="player">
-            <button className="play-white" onClick={handleWhiteClick}>White Noise</button>
-            <button className="play-brown" onClick={handleBrownClick}>Brown Noise</button>
+            <button className="play-white" onClick={togglePlayWhite}>White Noise</button>
+            <button className="play-brown" onClick={togglePlayBrown}>Brown Noise</button>
         </div>
     )
 }
