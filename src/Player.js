@@ -15,21 +15,25 @@ function Player() {
     useEffect(() => {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioContext = new AudioContext();
+        const bufferSize = audioContext.sampleRate * noiseDuration;
+
+        
+        const whiteBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+        let whiteData = whiteBuffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+            whiteData[i] = Math.random() * 2 - 1;
+        }
+
         let noise;
+        
         if (playWhite) {
             noise = audioContext.createBufferSource();
             let gainNode = audioContext.createGain();
-            const bufferSize = audioContext.sampleRate * noiseDuration;
-            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-            let data = buffer.getChannelData(0);
 
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1;
-            }
-
-            noise.buffer = buffer; 
+            noise.buffer = whiteBuffer; 
             noise.loop = true;
-            gainNode.gain.setValueAtTime(0.02, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.04, audioContext.currentTime);
             
             noise.connect(gainNode);
             gainNode.connect(audioContext.destination);
