@@ -54,7 +54,12 @@ function Player() {
 
             whiteNoise.buffer = whiteBuffer; 
             whiteNoise.loop = true;
-            gainNode.gain.setValueAtTime(0.04, audioContext.currentTime);
+            const volume = 0.04;
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+
+            gainNode.gain.linearRampToValueAtTime(volume / 4, audioContext.currentTime + 0.25);
+
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.5);
             
             whiteNoise.connect(gainNode);
             gainNode.connect(audioContext.destination);
